@@ -17,7 +17,8 @@
   "mainOutput": "main",
   "dependencies": {
     "jquery": "^2.1.1",
-    "lodash": "^2.4.1"
+    "lodash": "^2.4.1",
+    "three": "^0.69.0"
   },
   "devDependencies": {
     "autoprefixer-core": "^4.0.0",
