@@ -55,6 +55,7 @@ var init = function () {
   scene.add( light );
 
   renderer = new THREE.WebGLRenderer();
+  renderer.setSize( window.innerWidth, window.innerHeight );
   container.appendChild(renderer.domElement);
 
   for (var i = 0; i <= 10; i++) {
