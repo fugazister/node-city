@@ -19,7 +19,7 @@ var render = function () {
 
 var makeBox = function (params) {
   var geometry = new THREE.BoxGeometry( params.width, params.height, params.depth );
-  var material = new THREE.MeshBasicMaterial( { color: params.color } );
+  var material = new THREE.MeshBasicMaterial( { color: params.color, map: params.map } );
   var cube = new THREE.Mesh( geometry, material );
 
   cube.position.x = params.x;
@@ -50,25 +50,43 @@ var init = function () {
   scene = new THREE.Scene();
   scene.fog = new THREE.Fog(0x000000, 1, 15000);
 
-  var light = new THREE.PointLight(0xff2200);
-  light.position.set( 0, 0, 0 );
-  scene.add( light );
-
   renderer = new THREE.WebGLRenderer();
   renderer.setSize( window.innerWidth, window.innerHeight );
   container.appendChild(renderer.domElement);
 
-  for (var i = 0; i <= 10; i++) {
-    var cube = makeBox.call(scene, {
-      width: 1,
-      height: i,
-      depth: 1,
-      color: 0xffccff,
-      x: i * 3,
-      y: 0,
-      z: 0
-    });
-  }
+  var canvas = document.createElement( 'canvas' );
+  canvas.width = 128;
+  canvas.height = 128;
+
+  var context = canvas.getContext( '2d' );
+  var gradient = context.createRadialGradient( canvas.width / 2, canvas.height / 2, 0, canvas.width / 2, canvas.height / 2, canvas.width / 2 );
+  gradient.addColorStop( 0.1, 'rgba(0,0,150,1)' );
+  gradient.addColorStop( 1, 'rgba(255,255,255,1)' );
+
+  context.fillStyle = gradient;
+  context.fillRect( 0, 0, canvas.width, canvas.height );
+
+  var shadowTexture = new THREE.Texture( canvas );
+  shadowTexture.needsUpdate = true;
+
+  var groundMaterial = new THREE.MeshBasicMaterial( { color: 0xffffff, specular: 0x111111 } );
+
+  var mesh = new THREE.Mesh( new THREE.PlaneBufferGeometry( 20000, 20000 ), groundMaterial );
+  mesh.position.y = -250;
+  mesh.rotation.x = - Math.PI / 2;
+  mesh.receiveShadow = true;
+  scene.add( mesh );
+
+  var cube = makeBox.call(scene, {
+    width: 10,
+    height: 10,
+    depth: 10,
+    color: 0x0000ff,
+    x: 0,
+    y: 0,
+    z: 0,
+    map: shadowTexture
+  });
 
   window.addEventListener('resize', onWindowResize, false);
 };
