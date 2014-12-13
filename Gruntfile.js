@@ -1,11 +1,76 @@
 'use strict';
 
-var mountFolder = function (connect, dir) {
-  return connect.static(require('path').resolve(dir));
-};
+var express = require('express');
+var proxy = require('proxy-middleware');
+var url = require('url');
+var fs = require('fs');
+var esprima = require('esprima');
 
 var webpackDistConfig = require('./webpack.dist.config.js'),
     webpackDevConfig = require('./webpack.config.js');
+
+// walk folder (recursively)
+var walk = function(dir, done) {
+  var results = [];
+  fs.readdir(dir, function (err, list) {
+      if (err) {
+          return done(err);
+      }
+      var i = 0;
+      (function next() {
+          var file = list[i++];
+          if (!file) {
+              return done(null, results);
+          }
+          file = dir + '/' + file;
+          fs.stat(file, function (err, stat) {
+              if (stat && stat.isDirectory()) {
+                  walk(file, function (err, res) {
+                      results = results.concat(res);
+                      next();
+                  });
+              } else {
+                  results.push(file);
+                  next();
+              }
+          });
+      }());
+  });
+};
+
+var ast,
+    complex,
+    gameObjects;
+
+var getAST = function(complete) {
+  var _ast = [];
+
+  walk(__dirname + '/program', function(error, results) {
+    var content,
+        syntax;
+
+    results.forEach(function(filename, i) {
+      try {
+        content = fs.readFileSync(filename, 'utf-8');
+        syntax = esprima.parse(content, { tolerant: true, loc: true });
+
+        _ast.push(syntax);
+      } catch (e) {}
+
+      if (results.length >= i+1) {
+        complete(_ast);
+      }
+    });
+  });
+};
+
+var analyse = function() {
+  ast = [];
+
+  getAST(function(result) {
+    ast = result;
+  });
+};
 
 module.exports = function (grunt) {
   // Let *load-grunt-tasks* require everything
@@ -36,35 +101,6 @@ module.exports = function (grunt) {
 
       start: {
         keepAlive: true,
-      }
-    },
-
-    connect: {
-      options: {
-        port: 9000
-      },
-
-      dist: {
-        options: {
-          keepalive: true,
-          middleware: function (connect) {
-            return [
-              mountFolder(connect, pkgConfig.dist)
-            ];
-          }
-        }
-      }
-    },
-
-    open: {
-      options: {
-        delay: 500
-      },
-      dev: {
-        path: 'http://localhost:<%= connect.options.port %>/webpack-dev-server/'
-      },
-      dist: {
-        path: 'http://localhost:<%= connect.options.port %>/'
       }
     },
 
@@ -101,16 +137,31 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('serve', function (target) {
-    if (target === 'dist') {
-      return grunt.task.run(['build', 'open:dist', 'connect:dist']);
-    }
+  grunt.registerTask('analyse', analyse);
 
-    grunt.task.run([
-      'open:dev',
-      'webpack-dev-server'
-    ]);
+  grunt.registerTask('express', function() {
+    var app = express();
+
+    app.use('/assets', proxy(url.parse('http://localhost:9000/assets')));
+
+    app.get('/ast.json', function(req, res) {
+      res.send(ast);
+    });
+    app.get('/complex.json', function(req, res) {
+      res.send(complex);
+    });
+    app.get('/gameObjects.json', function(req, res) {
+      res.send(gameObjects);
+    });
+
+    app.get('/*', function(req, res) {
+      res.sendFile(__dirname + '/app/index.html');
+    });
+
+    app.listen(9001);
   });
+
+  grunt.registerTask('serve', ['analyse', 'express', 'webpack-dev-server']);
 
   grunt.registerTask('build', ['clean', 'copy', 'webpack']);
 
