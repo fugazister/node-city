@@ -17,6 +17,7 @@
   "mainOutput": "main",
   "dependencies": {
     "escomplex": "^0.2.5",
+    "escomplex-ast-moz": "^0.1.5",
     "esprima": "^1.2.2",
     "express": "^4.10.6",
     "jquery": "^2.1.1",
