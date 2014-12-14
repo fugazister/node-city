@@ -1,6 +1,6 @@
 var reportParser = function (report) {
   var index = 0,
-      gutter = 1,
+      gutter = 5,
       parsed = report.reports[0].functions;
 
 
@@ -35,7 +35,6 @@ var reportParser = function (report) {
 
   var result = parsed.map(function (f) {
     var colorValue = f.cyclomaticDensity;
-    console.log(colorValue);
 
     var r = Interpolate(startColors.r, endColors.r, 100, colorValue);
     var g = Interpolate(startColors.g, endColors.g, 100, colorValue);
