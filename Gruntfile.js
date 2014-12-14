@@ -9,6 +9,7 @@ var webpackDistConfig = require('./webpack.dist.config.js'),
 
 var getESCReport = require('./index.js').getESCReport;
 var getAST = require('./index.js').getAST;
+var reportParser = require('./report_parser.js').reportParser;
 
 module.exports = function (grunt) {
   // Let *load-grunt-tasks* require everything
@@ -87,6 +88,12 @@ module.exports = function (grunt) {
         res.send(ast);
       });
     });
+    app.get('/objects.json', function(req, res) {
+      getESCReport(function (ast) {
+        var parsedReport = reportParser(ast);
+        res.send(parsedReport);
+      });
+    });
     app.get('/complex.json', function(req, res) {
       getESCReport(function (report) {
         res.send(report);
@@ -100,7 +107,7 @@ module.exports = function (grunt) {
       res.sendFile(__dirname + '/app/index.html');
     });
 
-    app.listen(9001);
+    app.listen(3000);
   });
 
   grunt.registerTask('serve', ['express', 'webpack-dev-server']);
