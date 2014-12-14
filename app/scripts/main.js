@@ -71,7 +71,7 @@ var init = function () {
   var meshCanvas = new THREE.Mesh( geometry, groundMaterial );
   meshCanvas.rotation.x = - Math.PI / 2;
   meshCanvas.position.x = 0;
-  meshCanvas.position.y = -5;
+  meshCanvas.position.y = -0.1;
   meshCanvas.position.z = 0;
   meshCanvas.scale.set( 100, 100, 100 );
 
