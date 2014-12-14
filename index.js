@@ -1,5 +1,7 @@
 var fs = require('fs');
 var esprima = require('esprima');
+var escomplex = require('escomplex');
+var walker = require('escomplex-ast-moz');
 
 // walk folder (recursively)
 var walk = function(dir, done) {
@@ -39,7 +41,7 @@ var getAST = function(complete) {
 
   walk(__dirname + '/program', function(error, results) {
     var content,
-        syntax;
+        syntax = {};
 
     if (results.length == 0) {
       return complete(_ast);
@@ -48,8 +50,8 @@ var getAST = function(complete) {
     results.forEach(function(filename, i) {
       try {
         content = fs.readFileSync(filename, 'utf-8');
-        syntax = esprima.parse(content, { tolerant: true, loc: true });
-
+        syntax['path'] = filename;
+        syntax['ast'] = esprima.parse(content, { tolerant: true, loc: true });
         _ast.push(syntax);
       } catch (e) {}
 
@@ -60,6 +62,14 @@ var getAST = function(complete) {
   });
 };
 
+var getESCReport = function (cb) {
+  getAST(function (ast) {
+    var result = escomplex.analyse(ast, walker, {});
+    cb(result);
+  });
+};
+
 module.exports = {
-  getAST: getAST
+  getReport: getESCReport,
+  getESCReport: getESCReport
 };

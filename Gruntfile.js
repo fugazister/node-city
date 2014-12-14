@@ -7,7 +7,7 @@ var url = require('url');
 var webpackDistConfig = require('./webpack.dist.config.js'),
     webpackDevConfig = require('./webpack.config.js');
 
-var getAST = require('./index.js').getAST;
+var getReport = require('./index.js').getReport;
 
 module.exports = function (grunt) {
   // Let *load-grunt-tasks* require everything
@@ -82,7 +82,7 @@ module.exports = function (grunt) {
     app.use('/assets', proxy(url.parse('http://localhost:9000/assets')));
 
     app.get('/ast.json', function(req, res) {
-      getAST(function (ast) {
+      getReport(function (ast) {
         res.send(ast);
       });
     });
