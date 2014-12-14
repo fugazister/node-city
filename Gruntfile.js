@@ -49,6 +49,10 @@ var getAST = function(complete) {
     var content,
         syntax;
 
+    if (results.length == 0) {
+      return complete(_ast);
+    }
+
     results.forEach(function(filename, i) {
       try {
         content = fs.readFileSync(filename, 'utf-8');
