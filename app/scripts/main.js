@@ -47,8 +47,6 @@ var init = function () {
   controls.lookSpeed = 0.125;
   controls.lookVertical = true;
   controls.constrainVertical = true;
-  controls.verticalMin = 1.1;
-  controls.verticalMax = 2.2;
   scene = new THREE.Scene();
   scene.fog = new THREE.Fog(0x000000, 1, 15000);
 
