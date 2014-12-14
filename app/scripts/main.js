@@ -18,7 +18,7 @@ var controls, clock = new THREE.Clock();
 var render = function () {
   requestAnimationFrame(render);
   controls.update(clock.getDelta());
-  effect.render(scene, camera);
+  renderer.render(scene, camera);
 };
 
 var onWindowResize = function () {
@@ -46,8 +46,8 @@ var init = function () {
   renderer = new THREE.WebGLRenderer();
   renderer.setSize( window.innerWidth, window.innerHeight );
 
-  effect = new OculusRiftEffect( renderer, {worldScale: 100} );
-  effect.setSize( window.innerWidth, window.innerHeight );
+/*  effect = new OculusRiftEffect( renderer, {worldScale: 100} );
+  effect.setSize( window.innerWidth, window.innerHeight );*/
   container.appendChild(renderer.domElement);
 
   // GROUND
