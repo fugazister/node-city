@@ -71,5 +71,6 @@ var getESCReport = function (cb) {
 
 module.exports = {
   getReport: getESCReport,
+  getAST: getAST,
   getESCReport: getESCReport
 };
