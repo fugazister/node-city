@@ -59,7 +59,8 @@ var reportParser = function (report) {
       height: height,
       width: 1 * scaleIndex,
       depth: 1 * scaleIndex,
-      color: color
+      color: color,
+      line: f.line
     }
     index++;
     return res;
