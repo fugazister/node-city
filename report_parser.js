@@ -51,9 +51,9 @@ var reportParser = function (report) {
       x: index,
       y: 0,
       z: 0,
-      height: 1,
-      width: 1,
-      depth: 1,
+      height: 5,
+      width: 5,
+      depth: 5,
       color: color
     }
     index = index + gutter + 1;
