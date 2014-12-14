@@ -4,6 +4,7 @@ require('../styles/global.less');
 
 var THREE = require('three');
 var FlyControls = require('./FlyControls');
+var FirstPersonControls = require('./FirstPersonControls');
 var OculusRiftEffect = require('./OculusRiftEffect');
 
 var box = require('./box');
@@ -36,10 +37,18 @@ var init = function () {
   camera.position.z = 100;
   camera.position.y = 20;
 
-  controls = new FlyControls(camera);
-  controls.movementSpeed = 100;
-  controls.rollSpeed = Math.PI / 5;
+  //controls = new FlyControls(camera);
+  //controls.movementSpeed = 100;
+  //controls.rollSpeed = Math.PI / 5;
 
+  controls = new FirstPersonControls( camera );
+
+  controls.movementSpeed = 100;
+  controls.lookSpeed = 0.125;
+  controls.lookVertical = true;
+  controls.constrainVertical = true;
+  controls.verticalMin = 1.1;
+  controls.verticalMax = 2.2;
   scene = new THREE.Scene();
   scene.fog = new THREE.Fog(0x000000, 1, 15000);
 
