@@ -37,7 +37,7 @@ var init = function () {
   camera.position.y = 20;
 
   controls = new FlyControls(camera);
-  controls.movementSpeed = 10;
+  controls.movementSpeed = 100;
   controls.rollSpeed = Math.PI / 5;
 
   scene = new THREE.Scene();
