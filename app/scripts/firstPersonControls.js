@@ -190,6 +190,12 @@ FirstPersonControls = function ( object, domElement ) {
 
 	this.update = function( delta ) {
 
+
+		if (this.object.position.y < 2) {
+      this.object.position.y = 2;
+      return;
+    }
+
 		if ( this.freeze ) {
 
 			return;
