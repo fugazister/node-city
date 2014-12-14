@@ -2,6 +2,7 @@
 
 require('../styles/global.less');
 
+var Stats = require('stats-js');
 var THREE = require('three');
 var FlyControls = require('./FlyControls');
 var FirstPersonControls = require('./FirstPersonControls');
@@ -12,6 +13,8 @@ var parser = require('./parser');
 
 var container;
 
+var stats;
+
 var camera, scene, renderer, effect;
 
 var controls, clock = new THREE.Clock();
@@ -19,6 +22,7 @@ var controls, clock = new THREE.Clock();
 var render = function () {
   requestAnimationFrame(render);
   controls.update(clock.getDelta());
+  stats.update();
   renderer.render(scene, camera);
 };
 
@@ -90,6 +94,11 @@ var init = function () {
 
   // BOXES
   parser.makeObject(scene, box);
+
+  stats = new Stats();
+  stats.domElement.style.position = 'absolute';
+  stats.domElement.style.top = '0px';
+  container.appendChild(stats.domElement);
 
   window.addEventListener('resize', onWindowResize, false);
 };
