@@ -4,8 +4,6 @@ var reportParser = function (report) {
       gutter = 1 * scaleIndex,
       parsed = report.reports[0].functions;
 
-
-
   function Interpolate(start, end, steps, count) {
     var s = start,
         e = end,
@@ -48,11 +46,14 @@ var reportParser = function (report) {
       var color = "#fff";
     }
 
+    var height = f.sloc.logical;
+
     var res = {
+      name: f.name,
       x: index,
       y: 0,
-      z: 0,
-      height: 1 * scaleIndex,
+      z: index % (10 * scaleIndex),
+      height: height * scaleIndex,
       width: 1 * scaleIndex,
       depth: 1 * scaleIndex,
       color: color
