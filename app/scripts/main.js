@@ -4,13 +4,14 @@ require('../styles/global.less');
 
 var THREE = require('three');
 var FlyControls = require('./FlyControls');
+var OculusRiftEffect = require('./OculusRiftEffect');
 
 var box = require('./box');
 var parser = require('./parser');
 
 var container;
 
-var camera, scene, renderer;
+var camera, scene, renderer, effect;
 
 var controls, clock = new THREE.Clock();
 
@@ -36,7 +37,7 @@ var init = function () {
   camera.position.y = 20;
 
   controls = new FlyControls(camera);
-  controls.movementSpeed = 10;
+  controls.movementSpeed = 100;
   controls.rollSpeed = Math.PI / 5;
 
   scene = new THREE.Scene();
@@ -44,6 +45,9 @@ var init = function () {
 
   renderer = new THREE.WebGLRenderer();
   renderer.setSize( window.innerWidth, window.innerHeight );
+
+/*  effect = new OculusRiftEffect( renderer, {worldScale: 100} );
+  effect.setSize( window.innerWidth, window.innerHeight );*/
   container.appendChild(renderer.domElement);
 
   // GROUND
@@ -71,7 +75,7 @@ var init = function () {
   var meshCanvas = new THREE.Mesh( geometry, groundMaterial );
   meshCanvas.rotation.x = -Math.PI / 2;
   meshCanvas.position.x = 0;
-  meshCanvas.position.y = -5;
+  meshCanvas.position.y = -0.1;
   meshCanvas.position.z = 0;
   meshCanvas.scale.set( 100, 100, 100 );
 
