@@ -4,20 +4,21 @@ require('../styles/global.less');
 
 var THREE = require('three');
 var FlyControls = require('./FlyControls');
+var OculusRiftEffect = require('./OculusRiftEffect');
 
 var box = require('./box');
 var parser = require('./parser');
 
 var container;
 
-var camera, scene, renderer;
+var camera, scene, renderer, effect;
 
 var controls, clock = new THREE.Clock();
 
 var render = function () {
   requestAnimationFrame(render);
   controls.update(clock.getDelta());
-  renderer.render(scene, camera);
+  effect.render(scene, camera);
 };
 
 var onWindowResize = function () {
@@ -44,6 +45,9 @@ var init = function () {
 
   renderer = new THREE.WebGLRenderer();
   renderer.setSize( window.innerWidth, window.innerHeight );
+
+  effect = new OculusRiftEffect( renderer, {worldScale: 100} );
+  effect.setSize( window.innerWidth, window.innerHeight );
   container.appendChild(renderer.domElement);
 
   // GROUND
