@@ -69,7 +69,7 @@ var init = function () {
   var geometry = new THREE.PlaneBufferGeometry( 100, 100 );
 
   var meshCanvas = new THREE.Mesh( geometry, groundMaterial );
-  meshCanvas.rotation.x = - Math.PI / 2;
+  meshCanvas.rotation.x = -Math.PI / 2;
   meshCanvas.position.x = 0;
   meshCanvas.position.y = -5;
   meshCanvas.position.z = 0;
@@ -77,21 +77,7 @@ var init = function () {
 
   scene.add( meshCanvas );
 
-  // CUBE
-  var canvas = document.createElement( 'canvas' );
-  canvas.width = 128;
-  canvas.height = 128;
-
-  var context = canvas.getContext( '2d' );
-  var gradient = context.createRadialGradient( canvas.width / 2, canvas.height / 2, 0, canvas.width / 2, canvas.height / 2, canvas.width / 2 );
-  gradient.addColorStop( 0.1, 'rgba(0,0,150,1)' );
-  gradient.addColorStop( 1, 'rgba(255,255,255,1)' );
-  context.fillStyle = gradient;
-  context.fillRect( 0, 0, canvas.width, canvas.height );
-
-  var shadowTexture = new THREE.Texture( canvas );
-  shadowTexture.needsUpdate = true;
-
+  // BOXES
   parser.makeObject(scene, box);
 
   window.addEventListener('resize', onWindowResize, false);
