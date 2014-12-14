@@ -5,6 +5,9 @@ require('../styles/global.less');
 var THREE = require('three');
 var FlyControls = require('./FlyControls');
 
+var box = require('./box');
+var parser = require('./parser');
+
 var container;
 
 var camera, scene, renderer;
@@ -15,18 +18,6 @@ var render = function () {
   requestAnimationFrame(render);
   controls.update(clock.getDelta());
   renderer.render(scene, camera);
-};
-
-var makeBox = function (params) {
-  var geometry = new THREE.BoxGeometry( params.width, params.height, params.depth );
-  var material = new THREE.MeshBasicMaterial( { color: params.color, map: params.map } );
-  var cube = new THREE.Mesh( geometry, material );
-
-  cube.position.x = params.x;
-  cube.position.y = params.y;
-  cube.position.z = params.z;
-
-  this.add( cube );
 };
 
 var onWindowResize = function () {
@@ -80,13 +71,11 @@ var init = function () {
   var meshCanvas = new THREE.Mesh( geometry, groundMaterial );
   meshCanvas.rotation.x = - Math.PI / 2;
   meshCanvas.position.x = 0;
-  meshCanvas.position.y = -5;
+  meshCanvas.position.y = -0.5;
   meshCanvas.position.z = 0;
   meshCanvas.scale.set( 100, 100, 100 );
 
   scene.add( meshCanvas );
-
-
 
   // CUBE
   var canvas = document.createElement( 'canvas' );
@@ -103,16 +92,7 @@ var init = function () {
   var shadowTexture = new THREE.Texture( canvas );
   shadowTexture.needsUpdate = true;
 
-  var cube = makeBox.call(scene, {
-    width: 10,
-    height: 10,
-    depth: 10,
-    color: 0x0000ff,
-    x: 0,
-    y: 0,
-    z: 0,
-    map: shadowTexture
-  });
+  parser.makeObject(scene, box);
 
   window.addEventListener('resize', onWindowResize, false);
 };
