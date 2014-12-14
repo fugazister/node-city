@@ -1,7 +1,9 @@
 var reportParser = function (report) {
   var index = 0,
-      gutter = 5,
+      scaleIndex = 10,
+      gutter = 1 * scaleIndex,
       parsed = report.reports[0].functions;
+
 
 
   function Interpolate(start, end, steps, count) {
@@ -50,12 +52,12 @@ var reportParser = function (report) {
       x: index,
       y: 0,
       z: 0,
-      height: 5,
-      width: 5,
-      depth: 5,
+      height: 1 * scaleIndex,
+      width: 1 * scaleIndex,
+      depth: 1 * scaleIndex,
       color: color
     }
-    index = index + gutter + 1;
+    index = index + gutter + 1 * scaleIndex;
     return res;
   });
   return result;
